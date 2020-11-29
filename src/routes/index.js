@@ -10,12 +10,13 @@ module.exports = function ({ CategoryRoutes, AuthRoutes }) {
 
   apiRoutes.use(express.json()).use(cors()).use(helmet()).use(compression());
 
-  apiRoutes.use('/category', CategoryRoutes);
+  apiRoutes.use('/categories', CategoryRoutes);
   apiRoutes.use('/auth', AuthRoutes);
   router.use('/api', apiRoutes);
 
   router.use(NotFoundMiddleware);
   router.use(ErrorMiddleware);
+ 
 
   return router;
 };

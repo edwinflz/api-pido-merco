@@ -3,4 +3,5 @@ module.exports = {
   ErrorMiddleware: require('./error.middleware'),
   AuthMiddleware: require('./auth.middleware'),
   CacheMiddleware: require('./cache.middleware'),
+  ValidatorMiddleware: require('./validator.middleware'),
 };

@@ -26,7 +26,12 @@ class AuthService {
 
     const token = generateToken(userEncode);
 
-    return { token, user: userEncode };
+    return {
+      token,
+      user: userEncode,
+      status: 200,
+      msg: `Bienvenido ${createUser.name}`,
+    };
   }
 
   async login(user) {
@@ -48,7 +53,12 @@ class AuthService {
 
     const token = generateToken(userEncode);
 
-    return { token, user: userEncode };
+    return {
+      token,
+      user: userEncode,
+      status: 200,
+      msg: `Bienvenido ${hasUser.name}`,
+    };
   }
 
   async changePassword(user) {

@@ -1,8 +1,15 @@
 const { Router } = require('express');
+const { ValidatorMiddleware } = require('../middlewares');
+const { LoginValidator } = require('../middlewares/validators');
 
 module.exports = function ({ AuthController }) {
   const router = Router();
-  router.post('/login', AuthController.login);
+  router.post(
+    '/login',
+    LoginValidator(),
+    ValidatorMiddleware,
+    AuthController.login
+  );
   router.post('/register', AuthController.register);
   // router.patch('/changePassword', AuthController.changePassword);
 

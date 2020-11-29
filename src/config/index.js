@@ -19,6 +19,7 @@ module.exports = {
   PORT: process.env.PORT,
   APPLICATION_NAME: process.env.APPLICATION_NAME,
   SECRET_KEY: process.env.SECRET_KEY,
+  API_KEY: process.env.API_KEY,
   CACHE_KEY: process.env.CACHE_KEY,
   ...currentEnv
 };
