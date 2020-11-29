@@ -1,6 +1,9 @@
 const { Router } = require('express');
 const { ValidatorMiddleware } = require('../middlewares');
-const { LoginValidator } = require('../middlewares/validators');
+const {
+  LoginValidator,
+  RegisterValidator,
+} = require('../middlewares/validators');
 
 module.exports = function ({ AuthController }) {
   const router = Router();
@@ -10,7 +13,12 @@ module.exports = function ({ AuthController }) {
     ValidatorMiddleware,
     AuthController.login
   );
-  router.post('/register', AuthController.register);
+  router.post(
+    '/register',
+    RegisterValidator(),
+    ValidatorMiddleware,
+    AuthController.register
+  );
   // router.patch('/changePassword', AuthController.changePassword);
 
   return router;

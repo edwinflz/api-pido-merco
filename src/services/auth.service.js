@@ -17,7 +17,7 @@ class AuthService {
       throw error;
     }
 
-    const createUser = await _userService.create(user);
+    const createUser = await _userService.create({...user, status: 1});
 
     const userEncode = {
       id: createUser.id,

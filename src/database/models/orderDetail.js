@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       measure: DataTypes.STRING,
-      price: { type: DataTypes.INTEGER, allowNull: false },
       status: { type: DataTypes.INTEGER, allowNull: false },
       createdAt: {
         type: DataTypes.DATE,
