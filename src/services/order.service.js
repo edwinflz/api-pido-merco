@@ -14,7 +14,6 @@ class OrderService extends BaseService {
   }
 
   async save(request) {
-
     const { userId, details } = request;
     const hasUser = await _userService.get(userId);
     this.validateOrder(hasUser, details);
@@ -42,6 +41,39 @@ class OrderService extends BaseService {
       await t.rollback();
       throw new Error('No se pudo procesar su cotización');
     }
+  }
+
+  async getOrdersToShopper(id) {
+    const hasUser = await _userService.get(id);
+    const shopper = await hasUser.getShopper();
+
+    if (!hasUser && !shopper) {
+      const error = new Error();
+      error.status = 419;
+      error.message = 'Auth Invalido!';
+      throw error;
+    }
+
+    const orders = await _orderRepository.getOrdersToShopper(shopper.id);
+
+    let orderActive = [];
+    let orderWithOffers = [];
+
+    orders.forEach((order) => {
+      switch (order.status) {
+        case 1:
+          orderActive.push(order);
+          break;
+        case 2:
+          orderWithOffers.push(order);
+          break;
+      }
+    });
+
+    return {
+      ordersActive: orderActive,
+      ordersWithOffers: orderWithOffers,
+    };
   }
 
   validateOrder(hasUser, details) {
