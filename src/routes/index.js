@@ -4,7 +4,13 @@ const helmet = require('helmet');
 const compression = require('compression');
 require('express-async-errors');
 const { NotFoundMiddleware, ErrorMiddleware } = require('../middlewares');
-module.exports = function ({ CategoryRoutes, AuthRoutes, OrderRoutes }) {
+module.exports = function ({
+  CategoryRoutes,
+  AuthRoutes,
+  OrderRoutes,
+  OfferRoutes,
+  ShopperRoutes,
+}) {
   const router = express.Router();
   const apiRoutes = express.Router();
 
@@ -13,11 +19,12 @@ module.exports = function ({ CategoryRoutes, AuthRoutes, OrderRoutes }) {
   apiRoutes.use('/categories', CategoryRoutes);
   apiRoutes.use('/auth', AuthRoutes);
   apiRoutes.use('/orders', OrderRoutes);
+  apiRoutes.use('/offers', OfferRoutes);
+  apiRoutes.use('/shoppers', ShopperRoutes);
   router.use('/api', apiRoutes);
 
   router.use(NotFoundMiddleware);
   router.use(ErrorMiddleware);
- 
 
   return router;
 };

@@ -3,4 +3,6 @@ module.exports = {
     UserService: require('./user.service'),
     AuthService: require('./auth.service'),
     OrderService: require('./order.service'),
+    OfferService: require('./offer.service'),
+    ShopperService: require('./shopper.service'),
 }

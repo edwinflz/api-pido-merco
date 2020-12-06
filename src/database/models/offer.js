@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+const op = Sequelize.Op;
 module.exports = (sequelize, DataTypes) => {
   const Offer = sequelize.define(
     'Offer',
@@ -37,14 +39,23 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: true,
+      scopes: {
+        actives: {
+          where: {
+            status: {[op.ne]: 0}
+          }
+        },
+      }
     }
   );
   Offer.associate = function (models) {
     Offer.belongsTo(models.Order, {
       foreignKey: 'orderId',
+      as: 'order'
     });
     Offer.belongsTo(models.Business, {
       foreignKey: 'businessId',
+      as: 'business'
     });
     Offer.hasMany(models.OfferDetail, {
       foreignKey: 'offerId',

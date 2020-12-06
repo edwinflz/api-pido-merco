@@ -3,4 +3,6 @@ module.exports = {
   UserRepository: require('./user.repository'),
   OrderRepository: require('./order.repository'),
   OrderDetailRepository: require('./order-detail.repository'),
+  OfferRepository: require('./offer.repository'),
+  ShopperRepository: require('./shopper.repository'),
 };
