@@ -4,6 +4,12 @@ class ShopperController {
     _shopperService = ShopperService;
   }
 
+  async getUserIncludeShopper(req, res) {
+    const { id } = req.params;
+    const user = await _shopperService.getUserIncludeShopper(id);
+    return res.status(200).send(user);
+  }
+
   async save(req, res) {
     const { body } = req;
     const shopper = await _shopperService.save(body);

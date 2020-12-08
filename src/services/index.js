@@ -5,4 +5,5 @@ module.exports = {
     OrderService: require('./order.service'),
     OfferService: require('./offer.service'),
     ShopperService: require('./shopper.service'),
+    MunicipalityService: require('./municipality.service'),
 }

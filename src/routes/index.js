@@ -10,6 +10,7 @@ module.exports = function ({
   OrderRoutes,
   OfferRoutes,
   ShopperRoutes,
+  MunicipalityRoutes
 }) {
   const router = express.Router();
   const apiRoutes = express.Router();
@@ -21,6 +22,7 @@ module.exports = function ({
   apiRoutes.use('/orders', OrderRoutes);
   apiRoutes.use('/offers', OfferRoutes);
   apiRoutes.use('/shoppers', ShopperRoutes);
+  apiRoutes.use('/municipalities', MunicipalityRoutes);
   router.use('/api', apiRoutes);
 
   router.use(NotFoundMiddleware);

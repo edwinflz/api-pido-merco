@@ -4,4 +4,5 @@ module.exports = {
   OrderController: require('./order.controller'),
   OfferController: require('./offer.controller'),
   ShopperController: require('./shopper.controller'),
+  MunicipalityController: require('./municipality.controller'),
 };

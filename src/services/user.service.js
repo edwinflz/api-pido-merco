@@ -9,6 +9,10 @@ class UserService extends BaseService {
   async getUserByEmail(email) {
     return await _userRepository.getUserByEmail(email);
   }
+
+  async getUserIncludeShopper(id) {
+    return await _userRepository.getUserIncludeShopper(id);
+  }
 }
 
 module.exports = UserService;

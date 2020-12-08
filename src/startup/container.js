@@ -15,6 +15,7 @@ const {
   OrderService,
   OfferService,
   ShopperService,
+  MunicipalityService
 } = require('../services');
 
 // repositories
@@ -24,7 +25,8 @@ const {
   OrderRepository,
   OrderDetailRepository,
   OfferRepository,
-  ShopperRepository
+  ShopperRepository,
+  MunicipalityRepository
 } = require('../repositories');
 
 // controllers
@@ -33,7 +35,8 @@ const {
   AuthController,
   OrderController,
   OfferController,
-  ShopperController
+  ShopperController,
+  MunicipalityController
 } = require('../controllers');
 
 // routes
@@ -43,7 +46,8 @@ const {
   AuthRoutes,
   OrderRoutes,
   OfferRoutes,
-  ShopperRoutes
+  ShopperRoutes,
+  MunicipalityRoutes
 } = require('../routes/index.routes');
 
 const container = createContainer();
@@ -65,6 +69,7 @@ container
     OrderController: asClass(OrderController.bind(OrderController)).singleton(),
     OfferController: asClass(OfferController.bind(OfferController)).singleton(),
     ShopperController: asClass(ShopperController.bind(ShopperController)).singleton(),
+    MunicipalityController: asClass(MunicipalityController.bind(MunicipalityController)).singleton(),
   })
   .register({
     CategoryService: asClass(CategoryService).singleton(),
@@ -73,6 +78,7 @@ container
     OrderService: asClass(OrderService).singleton(),
     OfferService: asClass(OfferService).singleton(),
     ShopperService: asClass(ShopperService).singleton(),
+    MunicipalityService: asClass(MunicipalityService).singleton(),
   })
   .register({
     CategoryRepository: asClass(CategoryRepository).singleton(),
@@ -81,6 +87,7 @@ container
     OrderDetailRepository: asClass(OrderDetailRepository).singleton(),
     OfferRepository: asClass(OfferRepository).singleton(),
     ShopperRepository: asClass(ShopperRepository).singleton(),
+    MunicipalityRepository: asClass(MunicipalityRepository).singleton(),
   })
   .register({
     CategoryRoutes: asFunction(CategoryRoutes).singleton(),
@@ -88,6 +95,7 @@ container
     OrderRoutes: asFunction(OrderRoutes).singleton(),
     OfferRoutes: asFunction(OfferRoutes).singleton(),
     ShopperRoutes: asFunction(ShopperRoutes).singleton(),
+    MunicipalityRoutes: asFunction(MunicipalityRoutes).singleton(),
   });
 
 module.exports = container;

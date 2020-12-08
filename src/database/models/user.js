@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.hasOne(models.Shopper, {
         foreignKey: 'userId',
+        as: 'shopper'
       });
       User.hasOne(models.Business, {
         foreignKey: 'userId',

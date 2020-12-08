@@ -11,6 +11,10 @@ class ShopperService extends BaseService {
     _userService = UserService;
   }
 
+  async getUserIncludeShopper(id) {
+    return await _userService.getUserIncludeShopper(id);
+  }
+
   async save(request) {
     const { userId } = request;
     const hasUser = await _userService.get(userId);
@@ -21,11 +25,7 @@ class ShopperService extends BaseService {
       error.message = 'Auth Invalido!';
       throw error;
     }
-
   }
-
-  
-  
 }
 
 module.exports = ShopperService;

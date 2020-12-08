@@ -5,4 +5,5 @@ module.exports = {
   OrderDetailRepository: require('./order-detail.repository'),
   OfferRepository: require('./offer.repository'),
   ShopperRepository: require('./shopper.repository'),
+  MunicipalityRepository: require('./municipality.repository'),
 };

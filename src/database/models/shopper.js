@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     Shopper.belongsTo(models.Municipality, {
       foreignKey: 'municipalityId',
+      as: 'municipality'
     });
     Shopper.hasMany(models.Order, {
       foreignKey: 'shopperId',
