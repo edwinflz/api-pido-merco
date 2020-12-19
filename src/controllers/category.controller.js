@@ -1,12 +1,11 @@
-let _categoryService = null;
-
+let categoryService = null;
 class CategoryController {
   constructor({ CategoryService }) {
-    _categoryService = CategoryService;
+    categoryService = CategoryService;
   }
 
   async index(req, res) {
-    const categories = await _categoryService.getAllWithSubcategories();
+    const categories = await categoryService.getAllWithSubcategories();
     return res.send(categories);
   }
 }

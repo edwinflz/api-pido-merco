@@ -1,29 +1,19 @@
 const jwt = require('jsonwebtoken');
-const { SECRET_KEY, API_KEY } = require('../config');
-
+const { SECRET_KEY } = require('../config');
+const { CONSTANTS } = require('../helpers');
+const { generateError } = require('../helpers/generate-error.helper');
 module.exports = function (req, res, next) {
   const token = req.header('Authorization');
-  const appPublicKey = req.header('x_aplication_id');
- 
-  if (!token && !appPublicKey) {
-    const error = new Error();
-    error.status = 401;
-    error.message = 'No tienes permisos para acceder al recurso';
-    throw error;
+
+  if (!token) {
+    generateError(CONSTANTS.STATUS_401, CONSTANTS.ERROR_AUTH_PUBLIC_KEY);
   }
 
-  if (appPublicKey === API_KEY) {
+  jwt.verify(token, SECRET_KEY, function (error, decodedToken) {
+    if (error) {
+      generateError(CONSTANTS.STATUS_419, CONSTANTS.ERROR_AUTH_TOKEN);
+    }
+    req.user = decodedToken.user;
     next();
-  } else {
-    jwt.verify(token, SECRET_KEY, function (error, decodedToken) {
-      if (error) {
-        const error = new Error();
-        error.status = 419;
-        error.message = 'Auth invalido';
-        throw error;
-      }
-      req.user = decodedToken.user;
-      next();
-    });
-  }
+  });
 };

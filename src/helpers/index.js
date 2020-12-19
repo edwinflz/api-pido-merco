@@ -1,3 +1,4 @@
 module.exports = {
-    CACHE_TIME: require('./cache-time.helper')
+    CACHE_TIME: require('./cache-time.helper'),
+    CONSTANTS: require('./constants'),
 }

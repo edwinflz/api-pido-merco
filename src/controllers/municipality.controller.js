@@ -1,12 +1,11 @@
-let _municipalityService = null;
-
+let municipalityService = null;
 class MunicipalityController {
   constructor({ MunicipalityService }) {
-    _municipalityService = MunicipalityService;
+    municipalityService = MunicipalityService;
   }
 
   async index(req, res) {
-    const municipalities = await _municipalityService.getAllMunicipalities();
+    const municipalities = await municipalityService.getAllMunicipalities();
     return res.send(municipalities);
   }
 }

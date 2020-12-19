@@ -1,68 +1,94 @@
 const BaseService = require('./base.service');
-const { addHour } = require('../helpers/add-hour-date');
-let _orderRepository = null;
-let _orderDetailRepository = null;
-let _userService = null;
-let _db = null;
+const { CONSTANTS } = require('../helpers');
+const { addHour } = require('../helpers/add-hour-date.helper');
+const { generateError } = require('../helpers/generate-error.helper');
+
 class OrderService extends BaseService {
-  constructor({ db, OrderRepository, OrderDetailRepository, UserService }) {
+  constructor({
+    db,
+    OrderRepository,
+    OrderDetailRepository,
+    UserService,
+    CategoryService,
+  }) {
     super(OrderRepository);
-    _db = db;
-    _orderRepository = OrderRepository;
-    _orderDetailRepository = OrderDetailRepository;
-    _userService = UserService;
+    this.db = db;
+    this.orderRepository = OrderRepository;
+    this.orderDetailRepository = OrderDetailRepository;
+    this.userService = UserService;
+    this.categoryService = CategoryService;
   }
 
   async save(request) {
-    const { userId, details } = request;
-    const hasUser = await _userService.get(userId);
-    this.validateOrder(hasUser, details);
-    const order = await this.buildOrder(request, hasUser);
+    const { userId, details, subcategoryId } = request;
+    const hasUser = await this.userService.get(userId);
+    const subcategory = await this.categoryService.getSubcategoryBySlug(
+      subcategoryId
+    );
+    this.validateOrder(hasUser, details, subcategory);
 
-    const t = await _db.sequelize.transaction();
-
+    const order = await this.buildOrder(request, hasUser, subcategory);
+    let transaction;
+    let createOrder;
     try {
-      const createOrder = await _orderRepository.create(order, {
-        transaction: t,
-      });
+      transaction = await this.db.sequelize.transaction();
 
-      details.forEach(
-        async (detail) =>
-          await _orderDetailRepository.create(
-            { ...detail, orderId: createOrder.id, status: 1 },
-            { transaction: t }
-          )
+      createOrder = await this.orderRepository.create(
+        { ...order },
+        { transaction }
       );
-      await t.commit();
+
+      for (const detail of details) {
+        delete detail.id;
+        await this.orderDetailRepository.create(
+          { ...detail, orderId: createOrder.id, status: 1 },
+          { transaction }
+        );
+      }
+
+      await transaction.commit();
+
       return {
+        status: 200,
         msg: 'Su cotización se ha procesado procesado con exito!',
       };
     } catch (error) {
-      await t.rollback();
-      throw new Error('No se pudo procesar su cotización');
+      await transaction.rollback();
+      if (createOrder) {
+        createOrder.destroy();
+      }
+      generateError(CONSTANTS.STATUS_404, CONSTANTS.ERROR_ORDER_SAVE);
     }
   }
 
   async getOrdersToShopper(id) {
-    const hasUser = await _userService.get(id);
-    const shopper = await hasUser.getShopper();
-
-    if (!hasUser && !shopper) {
-      const error = new Error();
-      error.status = 419;
-      error.message = 'Auth Invalido!';
-      throw error;
-    }
-
-    const orders = await _orderRepository.getOrdersToShopper(shopper.id);
+    const hasUser = await this.userService.getUserIncludeShopper(id);
 
     let orderActive = [];
     let orderWithOffers = [];
 
-    orders.forEach((order) => {
+    if (!hasUser) {
+      generateError(CONSTANTS.STATUS_419, CONSTANTS.ERROR_AUTH_TOKEN);
+    }
+
+    if (!hasUser.shopper) {
+      return {
+        ordersActive: orderActive,
+        ordersWithOffers: orderWithOffers,
+      };
+    }
+
+    const orders = await this.orderRepository.getOrdersToShopper(
+      hasUser.shopper.id
+    );
+    const date = new Date();
+    orders.forEach(async (order) => {
       switch (order.status) {
         case 1:
-          orderActive.push(order);
+          const push = await this.checkDateOut(date, order);
+          if (push) {
+            orderActive.push(order);
+          }
           break;
         case 2:
           orderWithOffers.push(order);
@@ -76,33 +102,41 @@ class OrderService extends BaseService {
     };
   }
 
-  validateOrder(hasUser, details) {
-    if (!hasUser) {
-      const error = new Error();
-      error.status = 419;
-      error.message = 'Auth Invalido!';
-      throw error;
+  async checkDateOut(date, order) {
+    const dateOrder = new Date(order.dateOut);
+    if (date.getTime() > dateOrder.getTime()) {
+      await this.orderRepository.update(order.id, { status: 0 });
+      return false;
     }
+    return true;
+  }
 
+  validateOrder(hasUser, details, subcategory) {
+    if (!hasUser) {
+      generateError(CONSTANTS.STATUS_419, CONSTANTS.ERROR_AUTH_TOKEN);
+    }
     if (details.length === 0) {
-      const error = new Error();
-      error.status = 422;
-      error.message = 'Se requiere detalle de la cotización!';
-      throw error;
+      generateError(
+        CONSTANTS.STATUS_422,
+        'Se requiere detalle de la cotización!'
+      );
+    }
+    if (!subcategory) {
+      generateError(CONSTANTS.STATUS_422, CONSTANTS.ERROR_NOT_VALIDATE);
     }
   }
 
-  async buildOrder(request, hasUser) {
+  async buildOrder(request, hasUser, subcategory) {
     const shopper = await hasUser.getShopper();
     const date = new Date();
 
     return {
       shopperId: shopper.id,
-      subcategoryId: request.subcategoryId,
+      subcategoryId: subcategory.id,
       dateIn: date,
       dateOut: addHour(date),
       comment: request.comment,
-      bussinessId: request.bussinessId,
+      bussinessId: 0,
       cash: request.payment === 'Efectivo' ? 1 : 0,
       dataphone: request.payment === 'Tarjeta (Datafono)' ? 1 : 0,
       status: 1,

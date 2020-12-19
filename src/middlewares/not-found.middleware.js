@@ -1,2 +1,5 @@
+const { CONSTANTS } = require('../helpers');
 module.exports = (req, res, next) =>
-  res.status(404).send({ status: 404, message: 'No se ha encontrado lo que solicitas!' });
+  res
+    .status(404)
+    .send({ status: CONSTANTS.STATUS_404, message: CONSTANTS.ERROR_NOT_FOUND });

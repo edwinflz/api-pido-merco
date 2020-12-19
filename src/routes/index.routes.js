@@ -5,4 +5,5 @@ module.exports = {
     OfferRoutes: require('./offer.routes'),
     ShopperRoutes: require('./shopper.routes'),
     MunicipalityRoutes: require('./municipality.routes'),
+    UserRoutes: require('./user.routes'),
 }

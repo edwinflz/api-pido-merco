@@ -1,10 +1,14 @@
 const { Router } = require('express');
-const { AuthMiddleware } = require('../middlewares');
+const { AuthMiddleware, UploadImageMiddleware } = require('../middlewares');
 
 module.exports = function ({ ShopperController }) {
   const router = Router();
-  router.post('/', [AuthMiddleware], ShopperController.save);
   router.get('/:id', [AuthMiddleware], ShopperController.getUserIncludeShopper);
+  router.post(
+    '/:id',
+    [AuthMiddleware, UploadImageMiddleware.single('imgProfile')],
+    ShopperController.saveOrUpdateShopper
+  );
 
   return router;
 };

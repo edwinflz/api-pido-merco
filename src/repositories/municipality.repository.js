@@ -1,14 +1,10 @@
-const BaseRepository = require('./base.repository');
-let _municipality = null;
-
-class MunicipalityRepository extends BaseRepository {
+class MunicipalityRepository {
   constructor({ db }) {
-    super(db, 'Municipality');
-    _municipality = db.Municipality;
+    this.db = db;
   }
 
   getAllMunicipalities() {
-    return _municipality.findAll({
+    return this.db.Municipality.findAll({
       attributes: ['id', 'nameMunicipality'],
       where: { status: 1 },
     });

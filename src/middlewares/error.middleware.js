@@ -1,5 +1,6 @@
 module.exports = (err, req, res, next) => {
   const httpStatus = err.status || 500;
+
   let message = '';
 
   switch (httpStatus) {
@@ -11,7 +12,6 @@ module.exports = (err, req, res, next) => {
     case 422:
       message = err.message;
     default:
-      //message = err.message;
       break;
   }
   return res.status(httpStatus).send({

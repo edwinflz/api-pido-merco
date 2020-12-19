@@ -1,13 +1,10 @@
-const BaseService = require('./base.service');
-let _municipalityRepository = null;
-class MunicipalityService extends BaseService {
+class MunicipalityService {
   constructor({ MunicipalityRepository }) {
-    super(MunicipalityRepository);
-    _municipalityRepository = MunicipalityRepository;
+    this.municipalityRepository = MunicipalityRepository;
   }
 
   async getAllMunicipalities() {
-    return await _municipalityRepository.getAllMunicipalities();
+    return await this.municipalityRepository.getAllMunicipalities();
   }
 }
 

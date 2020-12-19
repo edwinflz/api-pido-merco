@@ -1,13 +1,14 @@
-const BaseService = require('./base.service');
-let _categoryRepository = null;
-class CategoryService extends BaseService {
+class CategoryService {
   constructor({ CategoryRepository }) {
-    super(CategoryRepository);
-    _categoryRepository = CategoryRepository;
+    this.categoryRepository = CategoryRepository;
   }
 
   async getAllWithSubcategories() {
-    return await _categoryRepository.getAllWithSubcategories();
+    return await this.categoryRepository.getAllWithSubcategories();
+  }
+
+  async getSubcategoryBySlug(slug) {
+    return await this.categoryRepository.getSubcategoryBySlug(slug);
   }
 }
 

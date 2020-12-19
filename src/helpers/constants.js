@@ -1,0 +1,16 @@
+module.exports = {
+  STATUS_500: 500,
+  STATUS_400: 400,
+  STATUS_401: 401,
+  STATUS_404: 404,
+  STATUS_419: 419,
+  STATUS_422: 422,
+  ERROR_NOT_FOUND: 'No se ha encontrado lo que solicitas!',
+  ERROR_AUTH_TOKEN: 'Autenticación invalido!',
+  ERROR_AUTH_PUBLIC_KEY: 'No tienes permisos para acceder al recurso',
+  ERROR_NOT_VALIDATE: 'Acción no válida!',
+  ERROR_ORDER_SAVE: 'No se pudo procesar su cotización',
+  ERROR_SHOPPER_UPDATE: 'No se pudo actualizar el perfil',
+  REGISTER: 'register',
+  LOGIN: 'login',
+};

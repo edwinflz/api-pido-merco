@@ -1,5 +1,8 @@
 const { Router } = require('express');
-const { ValidatorMiddleware } = require('../middlewares');
+const {
+  ValidatorMiddleware,
+  AuthPublicMiddleware,
+} = require('../middlewares');
 const {
   LoginValidator,
   RegisterValidator,
@@ -10,13 +13,13 @@ module.exports = function ({ AuthController }) {
   router.post(
     '/login',
     LoginValidator(),
-    ValidatorMiddleware,
+    [ValidatorMiddleware, AuthPublicMiddleware],
     AuthController.login
   );
   router.post(
     '/register',
     RegisterValidator(),
-    ValidatorMiddleware,
+    [ValidatorMiddleware, AuthPublicMiddleware],
     AuthController.register
   );
   // router.patch('/changePassword', AuthController.changePassword);

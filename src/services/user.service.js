@@ -1,17 +1,20 @@
 const BaseService = require('./base.service');
-let _userRepository = null;
 class UserService extends BaseService {
   constructor({ UserRepository }) {
     super(UserRepository);
-    _userRepository = UserRepository;
+    this.userRepository = UserRepository;
+  }
+
+  async getUser(id) {
+    return await this.userRepository.getUser(id);
   }
 
   async getUserByEmail(email) {
-    return await _userRepository.getUserByEmail(email);
+    return await this.userRepository.getUserByEmail(email);
   }
 
   async getUserIncludeShopper(id) {
-    return await _userRepository.getUserIncludeShopper(id);
+    return await this.userRepository.getUserIncludeShopper(id);
   }
 }
 

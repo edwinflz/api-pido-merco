@@ -1,23 +1,22 @@
-const BaseRepository = require('./base.repository');
-let _category = null;
-let _subcategory = null;
-class CategoryRepository extends BaseRepository {
+class CategoryRepository {
   constructor({ db }) {
-    super(db, 'Category');
-    _category = db.Category;
-    _subcategory = db.Subcategory;
+    this.db = db;
   }
 
   getAllWithSubcategories() {
-    return _category.findAll({
+    return this.db.Category.findAll({
       attributes: ['id', 'nameCategory', 'slug'],
       include: {
-        model: _subcategory,
+        model: this.db.Subcategory,
         as: 'subCategories',
         attributes: ['id', 'nameSubCategory', 'description', 'slug', 'img'],
         where: { status: 1 },
       },
     });
+  }
+
+  getSubcategoryBySlug(slug) {
+    return this.db.Subcategory.findOne({ where: { slug } });
   }
 }
 

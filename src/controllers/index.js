@@ -5,4 +5,5 @@ module.exports = {
   OfferController: require('./offer.controller'),
   ShopperController: require('./shopper.controller'),
   MunicipalityController: require('./municipality.controller'),
+  UserController: require('./user.controller'),
 };

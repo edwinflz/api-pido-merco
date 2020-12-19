@@ -1,25 +1,24 @@
-let _authService = null;
-
+let authService = null;
 class AuthController {
   constructor({ AuthService }) {
-    _authService = AuthService;
+    authService = AuthService;
   }
 
   async register(req, res) {
     const { body } = req;
-    const user = await _authService.register(body);
+    const user = await authService.register(body);
     return res.status(201).send(user);
   }
 
   async login(req, res) {
     const { body } = req;
-    const user = await _authService.login(body);
+    const user = await authService.login(body);
     return res.send(user);
   }
-  
+
   async changePassword(req, res) {
     const { body } = req;
-    const user = await _authService.changePassword(body);
+    const user = await authService.changePassword(body);
     return res.send(user);
   }
 }

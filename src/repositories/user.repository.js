@@ -1,22 +1,24 @@
 const BaseRepository = require('./base.repository');
-let _user = null;
-let _db = null;
+
 class UserRepository extends BaseRepository {
   constructor({ db }) {
     super(db, 'User');
-    _user = db.User;
-    _db = db;
+    this.db = db;
   }
 
   getUserByEmail(email) {
-    return _user.findOne({ where: { email } });
+    return this.db.User.findOne({ where: { email } });
+  }
+
+  getUser(id) {
+    return this.db.User.findOne({ attributes: ['id', 'name'], where: { id } });
   }
 
   getUserIncludeShopper(id) {
-    return _user.findOne({
+    return this.db.User.findOne({
       attributes: ['id', 'name'],
       include: {
-        model: _db.Shopper,
+        model: this.db.Shopper,
         as: 'shopper',
         attributes: [
           'id',
@@ -27,7 +29,7 @@ class UserRepository extends BaseRepository {
           'imgProfile',
         ],
         include: {
-          model: _db.Municipality,
+          model: this.db.Municipality,
           as: 'municipality',
           attributes: ['id', 'nameMunicipality'],
         },
