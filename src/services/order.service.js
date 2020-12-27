@@ -32,12 +32,10 @@ class OrderService extends BaseService {
     let createOrder;
     try {
       transaction = await this.db.sequelize.transaction();
-
       createOrder = await this.orderRepository.create(
         { ...order },
         { transaction }
       );
-
       for (const detail of details) {
         delete detail.id;
         await this.orderDetailRepository.create(
@@ -45,9 +43,7 @@ class OrderService extends BaseService {
           { transaction }
         );
       }
-
       await transaction.commit();
-
       return {
         status: 200,
         msg: 'Su cotización se ha procesado procesado con exito!',
@@ -62,15 +58,13 @@ class OrderService extends BaseService {
   }
 
   async getOrdersToShopper(id) {
-    const hasUser = await this.userService.getUserIncludeShopper(id);
-
+    const hasUser = await this.userService.getUserIncludeShopperWithBusiness(id);
     let orderActive = [];
     let orderWithOffers = [];
 
     if (!hasUser) {
       generateError(CONSTANTS.STATUS_419, CONSTANTS.ERROR_AUTH_TOKEN);
     }
-
     if (!hasUser.shopper) {
       return {
         ordersActive: orderActive,
@@ -95,7 +89,6 @@ class OrderService extends BaseService {
           break;
       }
     });
-
     return {
       ordersActive: orderActive,
       ordersWithOffers: orderWithOffers,
@@ -129,12 +122,12 @@ class OrderService extends BaseService {
   async buildOrder(request, hasUser, subcategory) {
     const shopper = await hasUser.getShopper();
     const date = new Date();
-
     return {
       shopperId: shopper.id,
       subcategoryId: subcategory.id,
       dateIn: date,
       dateOut: addHour(date),
+      domicile: shopper.domicile,
       comment: request.comment,
       bussinessId: 0,
       cash: request.payment === 'Efectivo' ? 1 : 0,

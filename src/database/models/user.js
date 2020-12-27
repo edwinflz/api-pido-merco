@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.hasOne(models.Business, {
         foreignKey: 'userId',
+        as: 'business'
       });
     }
   }

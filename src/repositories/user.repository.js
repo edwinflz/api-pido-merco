@@ -14,26 +14,42 @@ class UserRepository extends BaseRepository {
     return this.db.User.findOne({ attributes: ['id', 'name'], where: { id } });
   }
 
-  getUserIncludeShopper(id) {
+  getUserIncludeShopperWithBusiness(id) {
     return this.db.User.findOne({
       attributes: ['id', 'name'],
-      include: {
-        model: this.db.Shopper,
-        as: 'shopper',
-        attributes: [
-          'id',
-          'municipalityId',
-          'domicile',
-          'domicileTwo',
-          'domicileThree',
-          'imgProfile',
-        ],
-        include: {
-          model: this.db.Municipality,
-          as: 'municipality',
-          attributes: ['id', 'nameMunicipality'],
+      include: [
+        {
+          model: this.db.Shopper,
+          as: 'shopper',
+          attributes: [
+            'id',
+            'municipalityId',
+            'domicile',
+            'domicileTwo',
+            'domicileThree',
+            'imgProfile',
+          ],
+          include: {
+            model: this.db.Municipality,
+            as: 'municipality',
+            attributes: ['id', 'nameMunicipality'],
+          },
         },
-      },
+        {
+          model: this.db.Business,
+          as: 'business',
+          attributes: [
+            'id',
+            'nit',
+            'municipalityId',
+            'nameBusiness',
+            'address',
+            'phone',
+            'photo',
+            'status'
+          ],
+        },
+      ],
       where: { id },
     });
   }

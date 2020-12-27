@@ -3,7 +3,7 @@ const { AuthMiddleware, UploadImageMiddleware } = require('../middlewares');
 
 module.exports = function ({ ShopperController }) {
   const router = Router();
-  router.get('/:id', [AuthMiddleware], ShopperController.getUserIncludeShopper);
+  router.get('/:id', [AuthMiddleware], ShopperController.getUserIncludeShopperWithBusiness);
   router.post(
     '/:id',
     [AuthMiddleware, UploadImageMiddleware.single('imgProfile')],

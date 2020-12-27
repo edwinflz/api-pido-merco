@@ -8,7 +8,7 @@ class OrderRepository extends BaseRepository {
 
   getOrdersToShopper(id) {
     return this.db.Order.scope('actives').findAll({
-      attributes: ['id', 'dateIn', 'dateOut', 'status'],
+      attributes: ['id', 'dateIn', 'dateOut', 'domicile', 'status'],
       where: { shopperId: id },
       include: [
         {

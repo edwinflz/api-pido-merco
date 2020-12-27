@@ -10,12 +10,12 @@ class ShopperService extends BaseService {
     this.userService = UserService;
   }
 
-  async getUserIncludeShopper(id) {
-    return await this.userService.getUserIncludeShopper(id);
+  async getUserIncludeShopperWithBusiness(id) {
+    return await this.userService.getUserIncludeShopperWithBusiness(id);
   }
 
   async saveOrUpdate(request, file, { id }) {
-    const hasUser = await this.getUserIncludeShopper(id);
+    const hasUser = await this.getUserIncludeShopperWithBusiness(id);
 
     if (!hasUser) {
       generateError(CONSTANTS.STATUS_419, CONSTANTS.ERROR_AUTH_TOKEN);

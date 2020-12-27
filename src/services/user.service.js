@@ -13,8 +13,8 @@ class UserService extends BaseService {
     return await this.userRepository.getUserByEmail(email);
   }
 
-  async getUserIncludeShopper(id) {
-    return await this.userRepository.getUserIncludeShopper(id);
+  async getUserIncludeShopperWithBusiness(id) {
+    return await this.userRepository.getUserIncludeShopperWithBusiness(id);
   }
 }
 

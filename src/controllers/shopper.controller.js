@@ -4,9 +4,9 @@ class ShopperController {
     shopperService = ShopperService;
   }
 
-  async getUserIncludeShopper(req, res) {
+  async getUserIncludeShopperWithBusiness(req, res) {
     const { id } = req.params;
-    const user = await shopperService.getUserIncludeShopper(id);
+    const user = await shopperService.getUserIncludeShopperWithBusiness(id);
     return res.status(200).send(user);
   }
 
